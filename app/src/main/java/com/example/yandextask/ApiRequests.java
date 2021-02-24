@@ -1,7 +1,14 @@
 package com.example.yandextask;
 
+import android.content.Context;
+import android.util.Log;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -13,9 +20,9 @@ import retrofit2.Retrofit;
 public class ApiRequests {
     private final JsonPlaceHolderApi jsonPlaceHolderApi;
 
-
     public ApiRequests(Retrofit retrofit) {
         this.jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        getStockSymbol();
     }
 
     public void getProfile2() {
@@ -37,12 +44,18 @@ public class ApiRequests {
 
     public void getStockSymbol() {
         Call<List<StockSymbol>> call = jsonPlaceHolderApi.getStockSymbol();
+
         call.enqueue(new Callback<List<StockSymbol>>() {
             @Override
             public void onResponse(Call<List<StockSymbol>> call, Response<List<StockSymbol>> response) {
                 if (!response.isSuccessful()) {
                     return;
                 }
+                List<StockSymbol>stockSymbols = response.body();
+                for (int i=0; i<20; i++){
+                    Log.d("StockSymbols", stockSymbols.get(i).getSymbol());
+                }
+
             }
 
             @Override
@@ -51,4 +64,5 @@ public class ApiRequests {
             }
         });
     }
+
 }
