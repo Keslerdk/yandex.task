@@ -1,14 +1,16 @@
 package com.example.yandextask;
 
+import java.net.URL;
+
 public class Profile2 {
     private String country;
     private String currensy;
     private String exchange;
     private String ipo;
-    private int marketCapitalization;
+    private float marketCapitalization;
     private String name;
     private String phone;
-    private int shareOutstanding;
+    private float shareOutstanding;
     private String ticker;
     private String weburl;
     private String logo;
@@ -30,7 +32,7 @@ public class Profile2 {
         return ipo;
     }
 
-    public int getMarketCapitalization() {
+    public float getMarketCapitalization() {
         return marketCapitalization;
     }
 
@@ -42,7 +44,7 @@ public class Profile2 {
         return phone;
     }
 
-    public int getShareOutstanding() {
+    public float getShareOutstanding() {
         return shareOutstanding;
     }
 

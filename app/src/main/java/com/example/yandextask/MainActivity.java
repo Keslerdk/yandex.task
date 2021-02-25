@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import java.util.UUID;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okio.Timeout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView.LayoutManager myLayoutManager;
     List<StockSymbol> stockSymbols;
+    Profile2 profile2;
+    List<Profile2> profile2List = new ArrayList<>();
 
 //    JsonPlaceHolderApi jsonPlaceHolderApi;
 
@@ -45,27 +50,52 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new ApiRequest().execute();
+//        stockSymbols = getIntent().getParcelableExtra("List<StockSymbol>");
+//        Log.d("StockSymbols", String.valueOf(stockSymbols.get(0))+1212);
+        new RequestStockSymbols().execute();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                creatRecyclerView(1, 10, stockSymbols);
-                buildRecyclerView(stockSymbols);
+                creatRecyclerView(0, 10, stockSymbols);
+
+//                Log.d("my CardList111", String.valueOf(myCardList));
+//                buildRecyclerView(stockSymbols);
             }
         }, 25000);
+
+        final Handler handler1 = new Handler();
+        handler1.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("my CardList111", String.valueOf(myCardList)+111);
+                buildRecyclerView(stockSymbols);
+            }
+        }, 20000);
 
 
     }
 
     private void creatRecyclerView(int indexStart, int indexEnd, List<StockSymbol> stockSymbols) {
 
+//        profile2List = new ArrayList<Profile2>();
         for (int i = indexStart; i < indexEnd; i++) {
-            myCardList.add(new CardItem(stockSymbols.get(i).getSymbol()));
-//            myCardList.add(new CardItem("jdv", "hvds", "jhvs", ".zjs"));
-//            myCardList.add(new CardItem("", "", "", ""));
+            new RequestProfile2().execute(stockSymbols.get(i).getSymbol());
         }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("Profile2List", String.valueOf(profile2List));
+                for (int i = indexStart; i < indexEnd; i++) {
+                    myCardList.add(new CardItem(profile2List.get(i).getTicker(), profile2List.get(i).getName(), "bbb", "bbb"));
+                }
+                Log.d("my Card List", String.valueOf(myCardList)+111);
+            }
+        }, 20000);
+
 
     }
 
@@ -105,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             myAdapter.setLoaded();
 
                         }
-                    }, 3000);
+                    }, 7000);
                 } else {
                     Toast.makeText(MainActivity.this, "Load data completed !!!", Toast.LENGTH_SHORT).show();
                 }
@@ -164,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.notifyDataSetChanged();
     }
 
-    private class ApiRequest extends AsyncTask<String, Void, List<StockSymbol>> {
+    private class RequestStockSymbols extends AsyncTask<String, Void, List<StockSymbol>> {
 
         private JsonPlaceHolderApi jsonPlaceHolderApi;
 
@@ -183,10 +213,9 @@ public class MainActivity extends AppCompatActivity {
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
             Call<List<StockSymbol>> callStockSymbol = jsonPlaceHolderApi.getStockSymbol();
-            Call<List<Profile2>> callProfile2 = jsonPlaceHolderApi.getProfile2();
 
             try {
-                Response<List<StockSymbol>> responseStockSymbol  = callStockSymbol.execute();
+                Response<List<StockSymbol>> responseStockSymbol = callStockSymbol.execute();
                 List<StockSymbol> stockSymbols = responseStockSymbol.body();
                 return stockSymbols;
             } catch (IOException e) {
@@ -199,7 +228,51 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<StockSymbol> string) {
-            stockSymbols=string;
+            stockSymbols = string;
+        }
+    }
+
+
+    private class RequestProfile2 extends AsyncTask<String, Void, Profile2> {
+
+        private JsonPlaceHolderApi jsonPlaceHolderApi;
+
+
+        @Override
+        protected Profile2 doInBackground(String... strings) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .build();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://finnhub.io/api/v1/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(okHttpClient)
+                    .build();
+            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+            Call<Profile2> callProfile2 = jsonPlaceHolderApi.getProfile2(strings[0]);
+            try {
+                Response<Profile2> responseProfile2 = callProfile2.execute();
+                Profile2 profile2 = responseProfile2.body();
+                return profile2;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            } catch (RuntimeException e) {
+                return null;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(Profile2 string) {
+//            profile2 = string;
+//            Log.d("ProfileStringInside", String.valueOf(profile2));
+            profile2List.add(string);
+            Log.d("profile2 list Inside", String.valueOf(profile2List) + 111);
+            Log.d("ProfileInside", String.valueOf(string) + 111);
         }
     }
 }
