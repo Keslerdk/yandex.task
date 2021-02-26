@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginRight="16dp"
     android:layout_marginLeft="16dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="4dp"
     app:cardCornerRadius="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,17 +17,18 @@
         <ImageView
             android:id="@+id/icon"
             android:layout_width="52dp"
-            android:src="@drawable/test_icon"
+
             android:layout_height="52dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
+            android:background="@color/purple_200"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/ticker"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
@@ -43,9 +44,43 @@
             app:layout_constraintStart_toEndOf="@+id/icon"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!--        <View-->
+        <!--            android:id="@+id/tickerView"-->
+        <!--            android:layout_width="56dp"-->
+        <!--            android:layout_height="24dp"-->
+        <!--            android:layout_marginStart="12dp"-->
+        <!--            android:layout_marginLeft="12dp"-->
+        <!--            android:layout_marginTop="14dp"-->
+        <!--            android:background="@color/purple_200"-->
+        <!--            android:fontFamily="@font/montserrat_bold"-->
+        <!--            android:lineHeight="24dp"-->
+        <!--            android:text="Ticker"-->
+        <!--            android:textAllCaps="true"-->
+        <!--            android:textColor="#1A1A1A"-->
+        <!--            android:textFontWeight="700"-->
+        <!--            android:textSize="18dp"-->
+        <!--            android:textStyle="normal"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/icon"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <!--        <View-->
+        <!--            android:id="@+id/fullNameView"-->
+        <!--            android:layout_width="75dp"-->
+        <!--            android:layout_height="16dp"-->
+        <!--            android:background="@color/purple_200"-->
+        <!--            android:fontFamily="@font/montserrat"-->
+        <!--            android:lineHeight="16dp"-->
+        <!--            android:text="full name"-->
+        <!--            android:textColor="#1A1A1A"-->
+        <!--            android:textFontWeight="600"-->
+        <!--            android:textSize="12dp"-->
+        <!--            android:textStyle="normal"-->
+        <!--            app:layout_constraintStart_toStartOf="@+id/tickerView"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/tickerView" />-->
+
         <TextView
             android:id="@+id/fullName"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="16dp"
             android:fontFamily="@font/montserrat"
             android:lineHeight="16dp"
@@ -80,13 +115,13 @@
             android:layout_height="16dp"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
+            android:fontFamily="@font/montserrat"
+            android:lineHeight="16dp"
             android:text="delta price"
+            android:textColor="#24B35D"
+            android:textFontWeight="600"
             android:textSize="12dp"
             android:textStyle="normal"
-            android:textColor="#24B35D"
-            android:lineHeight="16dp"
-            android:fontFamily="@font/montserrat"
-            android:textFontWeight="600"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/currentPrice" />
 

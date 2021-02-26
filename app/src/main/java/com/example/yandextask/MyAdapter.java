@@ -86,7 +86,9 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof MyViewHolder) {
             CardItem currentPos = mCardList.get(position);
             MyViewHolder viewHolder = (MyViewHolder) holder;
+
             viewHolder.ticker.setText(currentPos.getmTicker());
+
             viewHolder.fullName.setText(currentPos.getmFullName());
             viewHolder.currentPrice.setText(currentPos.getmCurrentPrice());
             viewHolder.deltaPrice.setText(currentPos.getmDeltaPrice());
@@ -137,11 +139,14 @@ class MyViewHolder extends RecyclerView.ViewHolder {
     TextView currentPrice;
     TextView deltaPrice;
 
+
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
         icon = itemView.findViewById(R.id.icon);
+
         ticker = itemView.findViewById(R.id.ticker);
         fullName = itemView.findViewById(R.id.fullName);
+
         currentPrice = itemView.findViewById(R.id.currentPrice);
         deltaPrice = itemView.findViewById(R.id.currentPrice);
     }

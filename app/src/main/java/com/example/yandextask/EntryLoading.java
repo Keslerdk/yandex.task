@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.material.internal.ParcelableSparseArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -34,6 +35,8 @@ public class EntryLoading extends AppCompatActivity {
 
         loadingText = findViewById(R.id.text_info);
         mProgressBar = findViewById(R.id.entryProgressBar);
+
+        new RequestStockSymbols().execute();
     }
 
     private class RequestStockSymbols extends AsyncTask<String, Void, List<StockSymbol>> {
@@ -76,9 +79,17 @@ public class EntryLoading extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<StockSymbol> string) {
+
+            ArrayList<String> names = new ArrayList<>();
+
+            for (StockSymbol val: string) names.add(val.getSymbol());
+
             Intent intent = new Intent(EntryLoading.this, MainActivity.class);
 
-            intent.putExtra("List<StockSymbol>", (Parcelable) string);
+//            intent.getParcelableArrayListExtra("List<StockSymbol>", string);
+            intent.putStringArrayListExtra("List<StockSymbol>", names);
+            startActivity(intent);
+//            intent.putExtra("List<StockSymbol>", string);
 
         }
     }
